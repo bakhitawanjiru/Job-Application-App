@@ -1,31 +1,104 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '/config/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '/config/firebase';
 import { useNavigate } from 'react-router-dom';
 
+const ADMIN_CREDENTIALS = {
+  email: 'admin@jobjungle.com',
+  password: 'admin123'
+};
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+    console.log('Login attempt with:', email);
+
     try {
+      // Check for admin credentials first
+      if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+        console.log('Admin login successful');
+        localStorage.setItem('userRole', 'admin');
+        localStorage.setItem('isAdmin', 'true'); // Add additional flag
+        navigate('/admin-dashboard', { replace: true });
+        return;
+      }
+
+      // Regular user authentication
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       
-      const token = await user.getIdTokenResult();
-      if (token.claims.employer) {
-        navigate('/employer-dashboard');
+      // Get user data
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      const userData = userDoc.data();
+      if (userData) {
+        localStorage.setItem('userRole', userData.userType);
+        
+        // Navigate based on user type
+        if (userData.userType === 'employer') {
+          navigate('/employer-dashboard', { replace: true });
+        } else {
+          navigate('/jobseeker-dashboard', { replace: true });
+        }
       } else {
-        navigate('/jobseeker-dashboard');
+        throw new Error('User data not found');
       }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
 
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Invalid email or password');
+    } finally {
+      setLoading(false);
+    }
+  
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      setError(null);
+      setLoading(true);
+    
+      try {
+      
+        if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+        
+          localStorage.setItem('userRole', 'admin');
+          navigate('/admin-dashboard');
+          return;
+        }
+    
+     
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+      
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const userData = userDoc.data();
+      
+        if (userData) {
+          localStorage.setItem('userRole', userData.userType);
+        }
+    
+        
+        if (userData?.role === 'employer') {
+          navigate('/employer-dashboard');
+        } else {
+          navigate('/jobseeker-dashboard');
+        }
+    
+      } catch (err) {
+        console.error('Login error:', err);
+        setError('Failed to log in: ' + err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4682B4]/10 to-[#4682B4]/30">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-xl shadow-lg">

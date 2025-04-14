@@ -11,8 +11,8 @@ export function useAuth() {
 
 const Auth = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState(localStorage.getItem('userRole'));
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -21,10 +21,14 @@ const Auth = ({ children }) => {
         if (user) {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           if (userDoc.exists()) {
-            setUserRole(userDoc.data()?.userType);
+            const role = userDoc.data()?.userType;
+            setUserRole(role);
+            localStorage.setItem('userRole', role);
           }
-        } else {
+        } else if (localStorage.getItem('userRole') !== 'admin') {
+          // Don't clear admin role
           setUserRole(null);
+          localStorage.removeItem('userRole');
         }
       } catch (error) {
         console.error('Auth error:', error);

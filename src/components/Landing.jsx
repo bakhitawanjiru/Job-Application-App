@@ -8,15 +8,17 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#4682B4]/10 via-white to-[#4682B4]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            Find Your <span className="text-[#4682B4]">Dream Career</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            Connect with top employers and discover opportunities that match your skills and aspirations
-          </p>
-          
-          {/* Fixed nested divs */}
+        <div className="mb-12">
+            <h1 className="text-6xl font-bold text-[#4682B4] mb-4">
+              Job<span className="text-green-600">Jungle</span>
+            </h1>
+            <p className="text-xl text-gray-600">
+              Where Career Opportunities Flourish
+            </p>
+            </div>
+  
           <div className="flex justify-center gap-4 mb-12">
             <button
               onClick={() => navigate('/login')}

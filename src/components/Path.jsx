@@ -1,16 +1,41 @@
-import { Navigate } from 'react-router-dom';
-import { useAuth } from './Auth';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Path = ({ children, requiredRole }) => {
-  const { currentUser, userRole } = useAuth();
+  const navigate = useNavigate();
+  const userRole = localStorage.getItem('userRole');
 
-  if (!currentUser) {
-    return <Navigate to="/login" />;
-  }
+  useEffect(() => {
+    console.log('Current role:', userRole);
+    console.log('Required role:', requiredRole);
 
-  if (requiredRole && userRole !== requiredRole) {
-    return <Navigate to="/" />;
-  }
+    if (!userRole) {
+      navigate('/', { replace: true });
+      return;
+    }
+
+
+    if (requiredRole === 'admin' && userRole === 'admin') {
+      return; 
+    }
+
+    if (userRole !== requiredRole) {
+    
+      switch (userRole) {
+        case 'admin':
+          navigate('/admin-dashboard', { replace: true });
+          break;
+        case 'employer':
+          navigate('/employer-dashboard', { replace: true });
+          break;
+        case 'jobseeker':
+          navigate('/jobseeker-dashboard', { replace: true });
+          break;
+        default:
+          navigate('/', { replace: true });
+      }
+    }
+  }, [userRole, requiredRole, navigate]);
 
   return children;
 };
