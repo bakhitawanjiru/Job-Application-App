@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, updateDoc, doc, setDoc } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import { useAuth } from './Auth';
 
 const JobStatus = ({ jobId }) => {

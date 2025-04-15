@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import { useAuth } from './Auth';
 import Sidebar from './Sidebar';
 import { MdLocationOn, MdAttachMoney } from 'react-icons/md';

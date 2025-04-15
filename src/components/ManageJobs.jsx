@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import Sidebar from './Sidebar';
 import { useNavigate, Link } from 'react-router-dom';
 import { MdDelete, MdEdit, MdWork, MdArrowBack } from 'react-icons/md';

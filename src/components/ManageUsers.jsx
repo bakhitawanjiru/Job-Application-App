@@ -7,7 +7,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { db } from "/config/firebase";
+import { db } from "../config/firebase";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
 import { MdDelete, MdEdit, MdBlock } from "react-icons/md";

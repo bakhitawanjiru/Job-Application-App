@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './Auth';
 import { collection, query, where, getDocs, doc, deleteDoc, addDoc,updateDoc,  getDoc } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import Sidebar from './Sidebar';
 import { MdLocationOn, MdAttachMoney, MdEdit, MdDelete } from 'react-icons/md';
 import { BsBriefcase } from 'react-icons/bs';

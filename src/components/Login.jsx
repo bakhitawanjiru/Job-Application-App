@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '/config/firebase';
+import { auth, db } from '../config/firebase';
 import { useNavigate } from 'react-router-dom';
 
 const ADMIN_CREDENTIALS = {
@@ -22,20 +22,19 @@ const Login = () => {
     console.log('Login attempt with:', email);
 
     try {
-      // Check for admin credentials first
+
       if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
         console.log('Admin login successful');
         localStorage.setItem('userRole', 'admin');
-        localStorage.setItem('isAdmin', 'true'); // Add additional flag
+        localStorage.setItem('isAdmin', 'true'); 
         navigate('/admin-dashboard', { replace: true });
         return;
       }
 
-      // Regular user authentication
+   
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
-      // Get user data
+    
       const userDoc = await getDoc(doc(db, 'users', user.uid));
       const userData = userDoc.data();
       if (userData) {

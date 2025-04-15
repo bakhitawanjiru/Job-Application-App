@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './Auth';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import Sidebar from './Sidebar';
 import { MdCloudUpload } from 'react-icons/md';

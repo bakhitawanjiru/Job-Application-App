@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, query, getDocs, doc, updateDoc ,where  } from 'firebase/firestore';
-import { db } from '/config/firebase';
+import { db } from '../config/firebase';
 import { useAuth } from './Auth';
 import Sidebar from './Sidebar';
 import { MdEmail, MdPhone } from 'react-icons/md';
